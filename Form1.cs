@@ -13,11 +13,16 @@ namespace sql_prac
 {
     public partial class Form1 : Form
     {
+      
         public Form1()
         {
             InitializeComponent();
         }
+       
+        //2.establish connection 
+        SqlConnection con = new SqlConnection("Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True");
 
+       
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -25,9 +30,9 @@ namespace sql_prac
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
+        //    string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
  //2.establish connection 
-          SqlConnection con = new SqlConnection(ConnectionString);
+          //SqlConnection con = new SqlConnection(ConnectionString);
             //3.Open connection
             con.Open();
             //4.query
@@ -42,33 +47,39 @@ namespace sql_prac
             //6.close
             con.Close();
             MessageBox.Show("data saved");
+            textBox1.Text = textBox2.Text = textBox3.Text = textBox4.Text = " ";
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
-            SqlConnection con = new SqlConnection(ConnectionString);
+          //  string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
+           // SqlConnection con = new SqlConnection(ConnectionString);
             con.Open();
-            string Query = "select * from studentt";
+            string Query = "select * from studentt ";
+            
             SqlCommand cmd = new SqlCommand(Query, con);
-            var reader = cmd.ExecuteReader();
-            DataTable table = new DataTable();
-            table.Load(reader);
-            dataGridView1.DataSource = table;
+              
+           // var reader = cmd.ExecuteReader();
+            DataTable data = new DataTable();
+           
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(data);
+          
+            dataGridView1.DataSource = data;
             con.Close();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
-            SqlConnection con = new SqlConnection(ConnectionString);
+           // string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
+           // SqlConnection con = new SqlConnection(ConnectionString);
             con.Open();
-            string roolid = textBox1.Text;
+            /*string roolid = textBox1.Text;
             string namee = textBox2.Text;
             string fnamee = textBox3.Text;
-            string depp = textBox4.Text;
-            string Query = "update studentt set name='" + namee + "',fathername='" +
-           fnamee + "',depatment='" + depp + "'where rollno='" + roolid + "'";
+            string depp = textBox4.Text;*/
+            string Query = "update studentt set name='" + textBox1.Text + "',fathername='" +
+           textBox2.Text + "',depatment='" + textBox3.Text + "'where rollno='" + textBox4.Text + "'";
 
             SqlCommand cmd = new SqlCommand(Query, con);
             cmd.ExecuteNonQuery();
@@ -78,8 +89,8 @@ namespace sql_prac
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
-            SqlConnection con = new SqlConnection(ConnectionString);
+            //string ConnectionString = "Data Source=DESKTOP-OT87DKU\\SQLEXPRESS;Initial Catalog=emp;Integrated Security=True";
+            //SqlConnection con = new SqlConnection(ConnectionString);
             con.Open();
             string roolid = textBox1.Text;
            
@@ -89,6 +100,27 @@ namespace sql_prac
             con.Close();
             MessageBox.Show("data deleted");
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            string Query = "select * from studentt ";
+
+            SqlCommand cmd = new SqlCommand(Query, con);
+
+            // var reader = cmd.ExecuteReader();
+            DataTable data = new DataTable();
+
+            SqlDataReader da = cmd.ExecuteReader();
+            // DataTable dd = new DataTable();
+            // dd.Load(da);
+            Form2 form = new Form2(da);
+            form.Show();
+
+           // dataGridView1.DataSource = da;
+            con.Close();
+           
         }
     }
 }
